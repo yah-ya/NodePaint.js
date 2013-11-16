@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title >Node.js Drawing App - Yah Ya</title>
+		<style>
+			*{
+				margin:0px;
+				padding:0px;
+			}
+			input[type=text]{
+				background: rgb(238,238,238); /* Old browsers */
+				/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+				background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlZWVlZWUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+				background: -moz-linear-gradient(top,  rgba(238,238,238,1) 0%, rgba(238,238,238,1) 100%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(238,238,238,1)), color-stop(100%,rgba(238,238,238,1))); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* IE10+ */
+				background: linear-gradient(to bottom,  rgba(238,238,238,1) 0%,rgba(238,238,238,1) 100%); /* W3C */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-8 */
+
+				border:solid 1px #ccc;
+				width:150px;
+				height:30px;
+				padding:5px;
+			}
+			.chatBar{
+				position:fixed;
+				height:30px;
+				bottom:0px;
+				width:100%;
+				background: rgb(255,255,255); /* Old browsers */
+				/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+				background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlNWU1ZTUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+				background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* IE10+ */
+				background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* W3C */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-8 */
+
+				border-top:solid 1px #ccc;	
+				-moz-box-shadow: 0 10px 20px 10px rgba(0,0,0,0.1);
+				-webkit-box-shadow: 0 0 10px rgba(0,0,0,0.1);
+				box-shadow: 0 10px 20px 10px rgba(0,0,0,0.1);
+			}
+			body{
+				background:url('images/bg.png');
+			}
+			.pen{
+				float:right;
+				width:25px;
+				height:100px;
+				top:-20px;
+				position:relative;
+				cursor:pointer;
+				transition: top 0.3s;
+				-webkit-transition: top 0.3s;
+			}
+			.white{
+				background:url(images/white.png) 100% -60px no-repeat;
+				
+			}
+			.light_yellow{
+				background:url(images/light_yellow.png) 100% -60px no-repeat;
+			}
+			.yellow{
+				background:url(images/yellow.png) 100% -60px no-repeat;
+			}
+			.orange{
+				background:url(images/orange.png) 100% -60px no-repeat;
+			}
+			.light_orange{
+				background:url(images/light_pink.png) 100% -60px no-repeat;
+			}
+			.pink{
+				background:url(images/pink.png) 100% -60px no-repeat;
+			}
+			.red{
+				background:url(images/red.png) 100% -60px no-repeat;
+			}
+			.light_green{
+				background:url(images/green.png) 100% -60px no-repeat;
+			}
+			.green{
+				background:url(images/dark_green.png) 100% -60px no-repeat;
+			}
+			.blue{
+				background:url(images/light_blue.png) 100% -60px no-repeat;
+			}
+			.purple{
+				background:url(images/purple.png) 100% -60px no-repeat;
+			}
+			.dark_blue{
+				background:url(images/blue.png) 100% -60px no-repeat;
+			}
+			.brown{
+				background:url(images/brown.png) 100% -60px no-repeat;
+			}
+			.black{
+				background:url(images/black.png) 100% -60px no-repeat;
+			}
+			
+			.pen:hover{
+				top:0px;
+				transition: top 0.1s;
+				-webkit-transition: top 0.1s;
+			}
+			
+			.penSelected{
+				top:0px;
+			}
+			
+			#sampleBrush{
+				background:#000;
+				-webkit-border-radius: 50px;
+				-moz-border-radius: 50px;
+				border-radius: 50px; 
+			 	width: 10px;
+				height: 10px;
+				-webkit-transition-timing-function: cubic-bezier(0.25,0.1,0.25,1);
+			    transition-timing-function: cubic-bezier(0.25,0.1,0.25,1);
+				transition: width 0.3s,height 0.5s;
+				-webkit-transition: width 0.3s,height 0.5s;
+			}
+			
+			.online{
+				background:url(images/online.png) 50% 50% no-repeat;
+				width:30px;
+				height:30px;
+				margin-right:30px;
+			}
+			
+			.chat{
+				background:url(images/chat.png) 50% 50% no-repeat;
+				background-size:20px;
+				width:30px;
+				height:30px;
+				margin-right:30px;
+			}
+
+			.showChatOn{
+				background: rgb(229,229,229); /* Old browsers */
+				/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+				background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U1ZTVlNSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+				background: -moz-linear-gradient(top,  rgba(229,229,229,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(229,229,229,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+				background: linear-gradient(to bottom,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#ffffff',GradientType=0 ); /* IE6-8 */
+				border-left:solid 1px #ccc;	
+			}
+
+			
+			.showOnlinesOn{
+				background: rgb(229,229,229); /* Old browsers */
+				/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+				background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U1ZTVlNSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+				background: -moz-linear-gradient(top,  rgba(229,229,229,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(229,229,229,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+				background: -webkit-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+				background: -o-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+				background: -ms-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+				background: linear-gradient(to bottom,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#ffffff',GradientType=0 ); /* IE6-8 */
+				border-left:solid 1px #ccc;	
+			}
+			
+			#onlineListWrapper{
+				right:0px;
+				position:absolute;
+				bottom:30px;
+				width:200px;
+				height:250px;
+				background:#e5e5e5;
+				border-left:solid 1px #ccc;
+				border-top:solid 1px #ccc;
+				display:none;
+			}
+			#chatListWrapper{
+				right:100px;
+				position:absolute;
+				bottom:30px;
+				width:200px;
+				height:250px;
+				background:#e5e5e5;
+				border-left:solid 1px #ccc;
+				border-top:solid 1px #ccc;
+				display:none;
+				border-right:solid 1px #ccc;
+			}
+			#textStreamWrapper{
+				right:100px;
+				position:absolute;
+				bottom:30px;
+				width:200px;
+				height:250px;
+				background:#e5e5e5;
+				border-left:solid 1px #ccc;
+				border-top:solid 1px #ccc;
+				display:none;
+			}
+			
+		</style>
+		
+		<script src="js/jquery.js"></script>
+		<link rel="stylesheet" href="js/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="js/fancybox/source/jquery.fancybox.pack.js"></script>
+		<script type="text/javascript" src="js/cookie/jquery.cookie.js"></script>
+		<script src="js/Kinetic.js"></script>
+		<script src="js/js/jquery-ui-1.10.3.custom.min.js" ></script>
+		<script src="/socket.io/lib/socket.io.js"></script>
+		<link rel="stylesheet" href="js/css/ui-lightness/jquery-ui-1.10.3.custom.min.css" />
+		<script type="text/javascript">
+			var socket;
+			var name,stage;
+			var canvas,ctx,flag=false, firstTime = true,prevX=0,currX=0,prevY=0,currY=0, lastDraw=0;
+			var LINE_WIDTH = 10;
+			var LINE_COLOR = "black";
+			var unread=0;
+			
+			function showOnlines(){
+				if($('#showOnlines').hasClass('showOnlinesOn')){
+					$('#showOnlines').removeClass('showOnlinesOn');
+					$('#onlineListWrapper').slideUp(100);
+				} else {
+					$('#onlineListWrapper').slideDown(200);
+					$('#showOnlines').addClass('showOnlinesOn');
+					sendMessage('getPpl');
+				}
+			}
+			//
+			// --> Socket Part
+			//
+
+			
+			function connect(){
+				socket = io.connect('http://yeayea1.hp.af.cm');
+				socket.on('connect', function() {
+					console.log('Connected to the server.');
+				});
+				socket.on('draw', function(message) {
+					currX = message.cx;
+					currY = message.cy;
+					prevX = message.px;
+					prevY = message.py;
+					firstTime = message.firstTime;
+					draw();
+					
+				});
+				
+	
+				socket.on('setting', function(message) {
+					LINE_COLOR = message.color;
+					LINE_WIDTH = message.width;
+					$('.circle').css('background',LINE_COLOR);
+					drawCursor();
+				});
+				
+				socket.on('getPpl', function(message) {
+					$('#onlineList').html('');
+					console.debug(message);
+					$.each(message,function(i,item){
+						if(item!="")
+							$('#onlineList').append('<div style="width:100%;padding:5px;size:11px;color:#555" ><img src="images/person.png" align="absmiddle" /> '+item+'</div>');
+					});	
+				});
+				
+				socket.on('getOnline', function(message) {
+					
+					$('#onlineNum').html(message);
+				});
+				
+				socket.on('disconnect', function() {
+					console.log('Disconnected from the server.');
+				});
+				
+				socket.on('chat', function(message) {
+					if(!$('#showChat').hasClass('showChatOn')){
+						$('#chatPms').html(++unread);
+						$('#chatPms').css('color','#dd170e');
+					}
+					$('#textStream').append('<div style="width:90%;direction:rtl" ><div style="float:right" ><b>'+message.name+' : </b></div><div align="right" style="float:right;padding-right:5px;" >'+message.text+'</div><br style="clear:both" /></div>');
+					
+				});
+			}
+			
+			function showChat(){
+				if($('#showChat').hasClass('showChatOn')){
+					$('#showChat').removeClass('showChatOn');
+					$('#chatListWrapper').slideUp(100);
+
+				} else {
+					unread = 0;
+					$('#chatPms').html(unread);
+					$('#chatPms').css('color','#aaa');
+					$('#chatListWrapper').slideDown(200);
+					$('#showChat').addClass('showChatOn');
+				}
+			}
+			
+			function sendMessage(type,json){
+				
+				if(socket!='undefined')
+					socket.emit(type, json);	
+			}
+			
+			function getAName(){
+				if(typeof $.cookie('userName') === 'undefined')
+					$.fancybox($('#chooseName').html());
+				else{
+					window.name = $.cookie('userName');
+					$('#nameWrapper').html($.cookie('userName'));
+				}
+				
+			}
+			
+			function saveName(){
+				window.name = $('div.fancybox-inner input#tbName').val();
+				$.cookie('userName', window.name);
+				$('#nameWrapper').html(window.name);
+				$.fancybox.close();
+			}
+			
+			$(window).resize(function(){
+				//window.stage.setHeight($(window).height()-85);
+			});
+		    var currentMousePos = { x: -1, y: -1 };
+		    $(document).mousemove(function(event) {
+		        currentMousePos.x = event.pageX;
+		        currentMousePos.y = event.pageY;
+		    });
+			$(document).ready(function(){
+				getAName();
+				
+				//$('#paint').css({'left':($(window).width() - 960)/2 +'px'});
+				$('#slider').slider({
+				      min: 10,
+				      max: 100,
+				      step: 10,orientation: "vertical",
+				      slide: function( event, ui ) {
+				    	  $( "#sampleBrush" ).stop(true,true).fadeIn(300);
+				    	  $( "#sampleBrush" ).css({ 'top':parseInt(currentMousePos.y+10)+'px','left':parseInt(currentMousePos.x+10)+'px' });
+				          $( "#sampleBrush" ).css({ 'width':ui.value+'px','height':ui.value+'px' });
+				          LINE_WIDTH = ui.value;
+				          setTimeout(function(){
+				        	  $( "#sampleBrush" ).stop(true,true).fadeOut(500);
+				          },1000);
+				          sendMessage('setting', {"color":LINE_COLOR,"width":LINE_WIDTH});
+				        }
+				});
+				$('.pen').on('click',function(){
+					$('.pen').removeClass('penSelected');
+					$(this).addClass('penSelected');
+					LINE_COLOR = $(this).attr('data-color');
+					sendMessage('setting', {"color":LINE_COLOR,"width":LINE_WIDTH});
+				});
+				connect();
+				
+				
+				curveLayer = new Kinetic.Layer();
+				cursorLayer = new Kinetic.Layer();
+				window.stage = new Kinetic.Stage({
+			          container: 'paint',
+			          width: $('#paint').width() ,
+			          height: $(window).height()-85,
+
+			   });
+				window.stage.add(curveLayer);
+				window.stage.add(cursorLayer);
+				
+				$("#paint").mousemove(move);
+				$("#paint").mousedown(down);
+				$("#paint").mouseup(up);
+				
+	
+				getOnline();
+				sendMessage('userName', window.name);
+				sendMessage('setting', {"color":LINE_COLOR,"width":LINE_WIDTH});
+			});
+			
+			function getOnline(){
+				sendMessage('getOnline');
+			}
+			//
+			//	<-- Socket Part
+			//
+			
+			
+			//
+			// --> Drawing Part
+			//
+			
+			function drawCursor(){
+				var canvas = cursorLayer.getCanvas();
+			    var context = canvas.getContext();
+			    canvas.clear();
+				context.beginPath();
+				context.arc(currX, currY, LINE_WIDTH / 2 - 0.5, 0, 2 * Math.PI, false);
+				context.fillStyle = LINE_COLOR;
+				context.fill();
+				context.strokeStyle = "black";
+				context.strokeWidth='1';
+				context.stroke();
+			}
+		
+			function draw(){
+
+				var canvas = curveLayer.getCanvas();
+			    var context = canvas.getContext();
+				
+			    if(firstTime){
+			    	 context.beginPath();
+				     context.arc(prevX, prevY, LINE_WIDTH / 2 - 0.5, 0, 2 * Math.PI, false);
+				     context.fillStyle = '#'+LINE_COLOR;
+				     context.fill();
+				     
+				     
+			    }
+			    
+			    context.beginPath();
+		        context.moveTo(prevX, prevY);
+		        context.lineTo(currX, currY);
+		        context.strokeStyle = '#'+LINE_COLOR;
+		        context.lineWidth = LINE_WIDTH;
+		        context.stroke();
+		        
+		        context.beginPath();
+		        context.arc(currX, currY, LINE_WIDTH / 2 - 0.5, 0, 2 * Math.PI, false);
+		        context.fillStyle = '#'+LINE_COLOR;
+		        context.fill();
+				
+		        lastDraw = new Date();
+
+		       
+			}
+			
+			function move(e){
+				drawCursor();
+			    if(flag && ((lineDistance({x:prevX,y:prevY}, {x:currX,y:currY}) > LINE_WIDTH / 2))){
+			    	draw();
+			    	sendMessage('draw', {"cx":currX,"cy":currY,"px":prevX,"py":prevY,"firstTime":firstTime});
+			    	firstTime = false;
+			    	 prevX=currX;
+					    prevY=currY;
+			    }
+			   // sendMessage('cursor', {"cx":currX,"cy":currY});
+			    currX=e.clientX-$("#paint").offset().left;;
+			    currY=e.clientY-(100+$("#paint").offset().top); 
+			    
+			}
+			
+			function down(e){
+				 prevX=currX;prevY=currY;
+			     currX=e.clientX-$("#paint").offset().left;
+			     currY=e.clientY-(100+$("#paint").offset().top); 
+			     flag=true;
+			}
+			
+			function up(e){
+				 flag=false;
+				 
+				 firstTime = true;
+			}
+			
+			function lineDistance( point1, point2 ){
+				var xs = 0;
+				var ys = 0;
+				  
+				xs = point2.x - point1.x;
+				xs = xs * xs;
+				  
+				ys = point2.y - point1.y;
+				ys = ys * ys;
+				  
+				return Math.sqrt( xs + ys );
+			}
+			
+
+
+			//
+			// <-- Drawing Part
+			//
+			
+			//
+			// --> Chat Part
+			//
+			
+			
+						
+			function sendNewChat(){
+				sendMessage('chat', {"name":window.name,"text":$('#textPart').val()});
+				$('#textStream').append('<div style="width:90%;direction:rtl;color:#147fd9" ><div style="float:right" ><b>'+window.name+' : </b></div><div align="right" style="float:right;padding-right:5px;" >'+$('#textPart').val()+'</div><br style="clear:both" /></div>');
+				
+			}
+			
+			function clearPage(){
+				curveLayer.clear();
+			}
+			
+			//
+			// <-- chat Part
+			//
+		</script>
+	</head>
+	<body> 
+		<div id='chooseName' style='display:none' >
+			<div style="width:250px;height:50px;direction:rtl;font-family:tahoma" >
+				<div style="float:right;width:30%;line-height:40px;" >نام : </div>
+				<div style="float:right;width:70%" ><input type="text" id="tbName" /></div>
+			</div>
+			<div align='left' style="width:250px;height:50px;direction:rtl;font-family:tahoma" >
+				<input type='submit' onclick='saveName();' value='ثبت' />
+			</div>
+			
+		</div>
+		<div id='sampleBrush' style='position:absolute;display:none;z-index:999999999'></div>
+		 <div id='mainWrapper' style='width:100%;z-index:9999999;position:relative;' align='center'>
+			<div id='board' style='width:960px;background:#f6f6f6;border:solid 1px #dedede;border-top:0px;border-bottom:0px' >
+				
+				<div style='position:relative;width:80px;padding:10px 0px 0px 0px;right:10px;float:right' align='right'>
+					<div style='height:70px;float:right;width:20%' align='center' >
+						<div style='height:50px;float:right;' id='slider' >
+						</div>
+					</div>
+				</div>
+				<div style='position:relative;width:250px;padding:10px 0px 0px 0px;right:10px;float:right' align='right'>
+					<img style='cursor:pointer' onclick='clearPage();' src='images/erase.png' />
+				</div>
+			</div>
+			
+		
+		</div>
+
+		<div style='position:fixed;top:0px;width:100%;z-index:999999' align='center'>
+			<div style='height:50px;width:400px;'>
+				<div class='pen white' data-color='f7f7f7'></div>
+				<div class='pen light_yellow' data-color='ffea00'></div>
+				<div class='pen yellow' data-color='f0c101'></div>
+				<div class='pen orange' data-color='f2651d'></div>
+				<div class='pen light_orange' data-color='ff7688'></div>
+				<div class='pen pink' data-color='f325c5'></div>
+				<div class='pen red' data-color='dd170e'></div>
+				<div class='pen light_green' data-color='7eb12f'></div>
+				<div class='pen green' data-color='017754'></div>
+				<div class='pen blue' data-color='0286c6'></div>
+				<div class='pen purple' data-color='7910a1'></div>
+				<div class='pen dark_blue' data-color='06306c'></div>
+				<div class='pen brown' data-color='66403f'></div>
+				<div class='pen black' data-color='1f1f1f'></div>
+			</div>
+		</div>
+
+		 
+			
+ 		<div id="paint" style="background:#f6f6f6; width:960px;cursor:none;margin:0 auto;position:relative;"></div>
+		<div class='chatBar' >
+			<div onclick="showOnlines();" title='نمایش کاربران آنلاین' id='showOnlines' style='width:100px;float:right;cursor:pointer' >
+				<div class='online' style='float:right' >
+				
+				</div>
+				<div id='onlineNum' style='float:right;font-size:11px;height:30px;line-height:30px;color:#aaa' >
+					0
+				</div>
+			</div>
+			
+			<div onclick="showChat();" title='نمایش چت' id='showChat' style='width:100px;float:right;cursor:pointer' >
+				<div class='chat' style='float:right' >
+				</div>
+				<div id='chatPms' style='float:right;font-size:11px;height:30px;line-height:30px;color:#aaa' >
+					0
+				</div>
+			</div>
+			
+			<div style='width:100px;float:left' >
+				
+				<div style='margin-left:10px;width:100%;height:30px;' >
+					<div style='float:left;height:30px;line-height:30px;' ><img src='images/person.png' width="20" align="absmiddle" /></div><div id='nameWrapper' style='float:left;font-size:11px;padding-left:5px;line-height:30px;color:#aaa' ></div>
+				</div>
+			</div>
+			
+			<div id='onlineListWrapper'>
+				<div id='onlineList' style='width:100%;height:250px;overflow-y:scroll; overflow-x:hidden' >
+				
+				</div>
+			</div>
+			
+			<div id='chatListWrapper'>
+				<div style='position:absolute;bottom:0px' >
+					<div style='width:100%' >
+						<div style='width:150px;height:50px;float:right' >
+							<input style='width:130px;' type='text' id='textPart' />
+						</div>
+						<div style='width:50px;height:50px;float:right' >
+							<input onclick='sendNewChat();' value='ارسال' style='height:40px;width:50px;' type='submit' id='text' />
+						</div>
+					</div>
+				</div>
+				<div id='chatList' style='width:100%;height:100%' >
+					<div id='textStream' style='width:100%;height:200px;overflow-y:scroll; overflow-x:hidden' >
+					</div>
+				</div>
+			</div>
+
+			
+		</div>
+	</body>
